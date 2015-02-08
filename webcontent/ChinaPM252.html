@@ -49,105 +49,107 @@
 
 <div id='map'></div>
 <script>
-    map = L.map('map').setView([30.0, 110.0], 4);
-    var markers = L.markerClusterGroup({
-        spiderfyOnMaxZoom: false,
-        disableClusteringAtZoom: 12,
-        polygonOptions: {
-            color: "#2d84c8",
-            weight: 4,
-            opacity: 1,
-            fillOpacity: 0.5
-        },
-        //设置不同层级圆环的样式，它是根据数字位数来确定css的
-        iconCreateFunction: function (cluster) {
-            // get the number of items in the cluster
-            var count = cluster.getChildCount();
-            var digits = (count + "").length;
-            return new L.DivIcon({
-                html: count,
-                className: "cluster digits-" + digits,
-                iconSize: null
-            });
-        }
-    });
-    // Add a CloudMade tile layer with style #999
-    var herenormalchn = L.tileLayer('http://1.maps.nlp.nokia.com.cn/maptile/2.1/maptile/933ee1206a/normal.day/{z}/{x}/{y}/256/png8?lg=CHI&app_id=90oGXsXHT8IRMSt5D79X&token=JY0BReev8ax1gIrHZZoqIg&xnlp=CL_JSMv2.5.3.2', {
-        attribution: 'Map &copy; Certain data &copy; <a href="http://openstreetmap.org">HERE</a> contributors, <a href="http://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>'
-    });
-    herenormalchn.addTo(map);
-
-    var respText = pm25;
-    var heatmapLayer = L.TileLayer.heatMap({
-        radius: 20,
-        // radius could be absolute or relative
-        // absolute: radius in meters, relative: radius in pixels
-        //radius: { value: 15000, absolute: true },
-        opacity: 0.8,
-        gradient: {
-            0.35: "rgb(255,0,255)",
-            0.45: "rgb(0,0,255)",
-            0.55: "rgb(0,255,255)",
-            0.65: "rgb(0,255,0)",
-            0.95: "yellow",
-            1.0: "rgb(255,0,0)"
-        }
-    });
-
-    // 点聚类
-    var ms = [];
-    var heatms = []
-    var colors = ['red', 'blue', 'green', 'purple', 'orange', 'darkred', 'darkblue', 'darkgreen', 'cadetblue', 'darkpurple'];
-    var awesomeIcons = ['font', 'cloud-download', 'medkit', 'github-alt', 'coffee', 'food', 'bell-alt', 'question-sign', 'star'];
-    for (var i = 0; i < respText.length; i++) {
-        var a = respText[i];
-        var colort = 0;
-        switch (a['quality'])
-        {
-            case '优':
-                colort = 0;
-                break;
-            case '良':
-                colort = 1;
-                break;
-             case '轻度污染':
-                colort = 2;
-                break;
-            case '中度污染':
-                colort = 3;
-                break;
-            case '重度污染':
-                colort = 4;
-                break;
-            case '严重污染':
-                colort = 5;
-                break;
-            default:
-                colort = 0;
-                break;
-        }
-        var color = colors[colort];
-        var awesomeIcon = awesomeIcons[8];
-        var m = new L.Marker(new L.LatLng(a['lat'], a['lng']), {
-            value: 1,
-            title: 'ss',
-            icon: L.AwesomeMarkers.icon({
-                icon: awesomeIcon,
-                color: color
-            })
+       map = L.map('map').setView([30.0, 110.0], 4);
+        var markers = L.markerClusterGroup({
+            spiderfyOnMaxZoom: false,
+            disableClusteringAtZoom: 12,
+            polygonOptions: {
+                color: "#2d84c8",
+                weight: 4,
+                opacity: 1,
+                fillOpacity: 0.5
+            },
+            //设置不同层级圆环的样式，它是根据数字位数来确定css的
+            iconCreateFunction: function(cluster) {
+                // get the number of items in the cluster
+                var count = cluster.getChildCount();
+                var digits = (count + "").length;
+                return new L.DivIcon({
+                    html: count,
+                    className: "cluster digits-" + digits,
+                    iconSize: null
+                });
+            }
         });
-        var popupText = "<div>城市名称:" + a['area'] + "<br>空气质量:" + a['quality'] +"<br>AQI指数:" + a['aqi'] + "</div>";
-        m.bindPopup(popupText);
-        ms.push(m);
+         // Add a CloudMade tile layer with style #999
+        var AutoMap = L.tileLayer('http://webrd04.is.autonavi.com/appmaptile?lang=zh_cn&size=1&scale=1&style=8&x={x}&y={y}&z={z}', {
+            attribution: 'Map &copy; Certain data &copy; <a href="www.autonavi.com">Autonavi</a> contributors, <a href="http://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>'
+        });
+        herenormalchn.addTo(map);
 
-        var hm = {'lat': a['lat'], 'lng': a['lng'], value: a['AQI空气质量指数']}
-        heatms.push(hm);
-    }
-    markers.addLayers(ms);
-    heatmapLayer.addData(heatms);
-    heatmapLayer.addTo(map);
-    map.addLayer(markers);
+        var respText = pm25;
+        var heatmapLayer = L.TileLayer.heatMap({
+            radius: 20,
+            // radius could be absolute or relative
+            // absolute: radius in meters, relative: radius in pixels
+            //radius: { value: 15000, absolute: true },
+            opacity: 0.8,
+            gradient: {
+                0.35: "rgb(255,0,255)",
+                0.45: "rgb(0,0,255)",
+                0.55: "rgb(0,255,255)",
+                0.65: "rgb(0,255,0)",
+                0.95: "yellow",
+                1.0: "rgb(255,0,0)"
+            }
+        });
 
-</script>
+         // 点聚类
+        var ms = [];
+        var heatms = []
+        var colors = ['red', 'blue', 'green', 'purple', 'orange', 'darkred', 'darkblue', 'darkgreen', 'cadetblue', 'darkpurple'];
+        var awesomeIcons = ['font', 'cloud-download', 'medkit', 'github-alt', 'coffee', 'food', 'bell-alt', 'question-sign', 'star'];
+        for (var i = 0; i < respText.length; i++) {
+            var a = respText[i];
+            var colort = 0;
+            switch (a['空气质量指数类别']) {
+                case '优':
+                    colort = 0;
+                    break;
+                case '良':
+                    colort = 1;
+                    break;
+                case '轻度污染':
+                    colort = 2;
+                    break;
+                case '中度污染':
+                    colort = 3;
+                    break;
+                case '重度污染':
+                    colort = 4;
+                    break;
+                case '严重污染':
+                    colort = 5;
+                    break;
+                default:
+                    colort = 0;
+                    break;
+            }
+            var color = colors[colort];
+            var awesomeIcon = awesomeIcons[8];
+            var m = new L.Marker(new L.LatLng(a['lat'], a['lng']), {
+                value: 1,
+                title: 'ss',
+                icon: L.AwesomeMarkers.icon({
+                    icon: awesomeIcon,
+                    color: color
+                })
+            });
+            var popupText = "<div>城市名称:" + a['城市'] + "<br>空气质量:" + a['空气质量指数类别'] + "<br>AQI指数:" + a['AQI空气质量指数'] + "</div>";
+            m.bindPopup(popupText);
+            ms.push(m);
+
+            var hm = {
+                'lat': a['lat'],
+                'lng': a['lng'],
+                value: a['AQI空气质量指数']
+            }
+            heatms.push(hm);
+        }
+        markers.addLayers(ms);
+        heatmapLayer.addData(heatms);
+        heatmapLayer.addTo(map);
+        map.addLayer(markers);
+    </script>
 </body>
 </html>
