@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <title>Esri数据与LeafletJS的结合</title>
+    <link rel="stylesheet" href="../lib/leaflet/leaflet.css"/>
+    <!--[if lte IE 8]>
+    <link rel="stylesheet" href="../lib/leaflet/leaflet.ie.css"/><![endif]-->
+    <link rel="stylesheet" href="../lib/leaflet/plugin/esri/demo.css"/>
+
+    <script type="text/javascript" src="../lib/jquery/jquery-1.9.1.min.js"></script>
+    <script src="../lib/leaflet/leaflet.js"></script>
+    <script src="../lib/leaflet/plugin/esri/esri-leaflet/esri-leaflet.js"></script>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+        }
+
+        #map {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            height: 100%;
+        }
+    </style>
+    <script>
+        function showControls() {
+            var t = document.getElementById("title");
+            var c = document.getElementById("controlContainer");
+            if (c.className == "control-container") {
+                t.className = "title expand"
+                c.className = "control-container hide";
+            } else {
+                t.className = "title contract"
+                c.className = "control-container";
+            }
+        }
+    </script>
+</head>
+<body>
+
+<div id='map'></div>
+<div class="demo-controls">
+    <h1 class="title expand" id="title" onclick="showControls();">ArcGIS底图</h1>
+
+    <div class="control-container hide" id="controlContainer">
+        <button class="btn wide" onclick="setBasemap('Streets');">Streets</button>
+        </br>
+        <button class="btn wide" onclick="setBasemap('Imagery');">Imagery</button>
+        </br>
+        <button class="btn wide" onclick="setBasemap('Gray');">Gray</button>
+        </br>
+        <button class="btn wide" onclick="setBasemap('Topographic');">Topographic</button>
+        </br>
+        <button class="btn wide" onclick="setBasemap('NationalGeographic');">National Geographic</button>
+        </br>
+        <button class="btn wide" onclick="setBasemap('Oceans');">Oceans</button>
+    </div>
+</div>
+<script>
+    var template = "<h3>{NAME}</h3><small>{ACRES} Acres<small><br><small>Property ID: {PROPERTYID}<small>"
+
+
+    var map = new L.Map('map', {center: [45.528, -122.680], zoom: 13});
+    var layer = L.esri.basemapLayer("Topographic");
+    map.addLayer(layer);
+    var layerLabels;
+    L.esri.featureLayer("http://services.arcgis.com/rOo16HdIMeOBI4Mb/arcgis/rest/services/Parks_pdx/FeatureServer/0", {
+        style: function (feature) {
+            return { color: "#70ca49", weight: 2 };
+        },
+        onEachFeature: function (feature, layer) {
+            layer.bindPopup(L.Util.template(template, feature.properties));
+        }
+    }).addTo(map);
+    map.on('contextmenu', function (e) {
+    });
+    map.addControl(layersControl);
+
+    function setBasemap(mapType) {
+        // Add basemap tile layer
+        if (layer) {
+            map.removeLayer(layer);
+        }
+        layer = L.esri.basemapLayer(mapType);
+        map.addLayer(layer);
+        // Add labels layer
+        if (layerLabels) {
+            map.removeLayer(layerLabels);
+        }
+        if (mapType == "Gray" || mapType == "Imagery") {
+            layerLabels = L.esri.basemapLayer(mapType + "Labels");
+            map.addLayer(layerLabels);
+        }
+    }
+</script>
+
+</body>
+</html>

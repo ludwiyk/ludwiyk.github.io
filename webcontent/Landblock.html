@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>土地地块资源调查</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <link rel="stylesheet" href="../lib/leaflet/leaflet.css"/>
+    <!--[if lte IE 8]>
+    <link rel="stylesheet" href="../lib/leaflet/leaflet.ie.css"/><![endif]-->
+    <script src="../lib/leaflet/leaflet-0.6.2.js"></script>
+</head>
+<body>
+<style>
+    body {
+        margin: 0;
+        padding: 0;
+    }
+
+    #map {
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        height: 100%;
+    }
+</style>
+<div id='map'></div>
+<script>
+
+
+    // Add a CloudMade tile layer with style #999
+    var baseLayer = L.tileLayer('http://{s}.tiles.mapbox.com/v3/openplans.map-g4j0dszr/{z}/{x}/{y}.png', {
+        attribution: 'Map &copy; Pacific Rim Coordination Center (PRCC).  Certain data &copy; <a href="http://openstreetmap.org">OpenStreetMap</a> contributors, <a href="http://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>',
+        key: 'BC9A493B41014CAABB98F0471D759707',
+        styleId: 22677
+    });
+    var osmLayer = L.tileLayer('http://{s}.tile.osm.org/{z}/{x}/{y}.png', {
+        attribution: 'Map &copy; Pacific Rim Coordination Center (PRCC).  Certain data &copy; <a href="http://openstreetmap.org">OpenStreetMap</a> contributors, <a href="http://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>',
+        key: 'BC9A493B41014CAABB98F0471D759707',
+        styleId: 22677
+    });
+    var baseLayer2 = L.tileLayer('http://3.maptile.lbs.ovi.com/maptiler/v2/maptile/newest/normal.day/{z}/{x}/{y}/256/png8?app_id=BC9A493B41014CAABB98F0471D759707&token=AJKnXv84fjrb0KIHawS0Tg', {
+        attribution: 'Map &copy; Certain data &copy; <a href="http://openstreetmap.org">HERE</a> contributors, <a href="http://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>'
+    });
+    var baseLayer3 = L.tileLayer('http://webrd04.is.autonavi.com/appmaptile?lang=zh_cn&size=1&scale=1&style=8&x={x}&y={y}&z={z}', {
+        attribution: 'Map &copy; Certain data &copy;</a> contributors, 高德</a>'
+    });
+    var baseLayer4 = L.tileLayer('http://{s}.tiles.mapbox.com/v3/bclc-apec.map-rslgvy56/{z}/{x}/{y}.png', {
+        attribution: 'Map &copy; Certain data &copy; <a href="http://openstreetmap.org">HERE</a> contributors, 高德</a>'
+    });
+    var baseLayer5 = L.tileLayer('https://mts{s}.google.com/vt/lyrs=m@203000000&hl=zh&src=app&x={x}&y={y}&z={z}&s=Galile', {
+        subdomains : '0123',
+        attribution: 'Map &copy; Certain data &copy; <a href="http://openstreetmap.org">HERE</a> contributors, Google</a>'
+    });
+    var cloudLayer = L.tileLayer('http://{s}.tile.cloudmade.com/{key}/{styleId}/256/{z}/{x}/{y}.png', {
+				key : 'BC9A493B41014CAABB98F0471D759707',
+				styleId : 997,
+				maxZoom : 19
+	});
+    var herenormalchn = L.tileLayer('http://1.maps.nlp.nokia.com.cn/maptile/2.1/maptile/933ee1206a/normal.day/{z}/{x}/{y}/256/png8?lg=CHI&app_id=90oGXsXHT8IRMSt5D79X&token=JY0BReev8ax1gIrHZZoqIg&xnlp=CL_JSMv2.5.3.2', {
+        attribution: 'Map &copy; Certain data &copy; <a href="http://openstreetmap.org">HERE</a> contributors, <a href="http://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>'
+    });
+    var hereSat = L.tileLayer('http://1.maps.nlp.nokia.com.cn/maptile/2.1/maptile/933ee1206a/hybrid.day/{z}/{x}/{y}/256/png8?lg=CHI&app_id=90oGXsXHT8IRMSt5D79X&token=JY0BReev8ax1gIrHZZoqIg&xnlp=CL_JSMv2.5.3.2', {
+        attribution: 'Map &copy; Certain data &copy; <a href="http://openstreetmap.org">HERE</a> contributors, <a href="http://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>'
+    });
+    var hereEle = L.tileLayer('http://1.maps.nlp.nokia.com.cn/maptile/2.1/maptile/933ee1206a/terrain.day/{z}/{x}/{y}/256/png8?lg=CHI&app_id=90oGXsXHT8IRMSt5D79X&token=JY0BReev8ax1gIrHZZoqIg&xnlp=CL_JSMv2.5.3.2', {
+        attribution: 'Map &copy; Certain data &copy; <a href="http://openstreetmap.org">HERE</a> contributors, <a href="http://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>'
+    });
+    var mapboxLayer1 = L.tileLayer('https://a.tiles.mapbox.com/v3/examples.bc17bb2a/{z}/{x}/{y}.png', {
+        attribution: 'Map &copy; Pacific Rim Coordination Center (PRCC).  Certain data &copy; <a href="http://openstreetmap.org">OpenStreetMap</a> contributors, <a href="http://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>',
+        key: 'BC9A493B41014CAABB98F0471D759707',
+        styleId: 22677
+    });
+    //    map.addLayer(baseLayer2);
+    var baseMaps = {
+        "Mapbox": baseLayer,
+        "Nokia HERE": baseLayer2,
+        'Nokia HERE中文':herenormalchn,
+        'Nokia HERE中文卫星':hereSat,
+        'Nokia HERE中文地形':hereEle,
+        '高德地图':baseLayer3,
+        '地震图':baseLayer4,
+        '谷歌地图':baseLayer5,
+        'Cloudmade':cloudLayer,
+        'OSM底图':osmLayer,
+        'Mapbox1':mapboxLayer1
+    };
+    layersControl = new L.Control.Layers(baseMaps);
+    var map = new L.Map('map', {center: [30.258 , 120.1556], zoom: 8, layers: [baseLayer5]});
+    map.addControl(layersControl);
+</script>
+</body>
+</html>

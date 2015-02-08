@@ -1,0 +1,116 @@
+<html>
+	<head>
+		<title>社会化应用信息展示平台</title>
+		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+		<link rel="favicon.ico" href="favicon.ico" type="image/x-icon">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+		<!--引入EXT API和关键CSS，其中custom.css是自定义CSS----->
+		<script type="text/javascript" src="../lib/ext/ext-all.js"></script>
+		<link rel="stylesheet" href="../lib/ext/resources/css/custom.css" />
+		<link rel="stylesheet" href="../lib/ext/resources/ext-theme-neptune/ext-theme-neptune-all.css" />
+		<link rel="stylesheet" href="../lib/leaflet/leaflet.css" />
+		<!--[if lte IE 8]>
+        <link rel="stylesheet" href="../lib/leaflet/leaflet.ie.css"/><![endif]-->
+		<!--引入leaflet的API----->
+		<script src="../lib/leaflet/leaflet-0.6.2-src.js"></script>
+        <script type="text/javascript" src="../lib/heatmap/QuadTree.js"></script>
+        <script type="text/javascript" src="../lib/heatmap/heatmap.js"></script>
+        <script type="text/javascript" src="../lib/heatmap/heatmap-leaflet.js"></script>
+		<script src="../lib/api.js"></script>
+		<script src="../lib/echarts/esl.js"></script>
+        <script src="../appjs/echarts.js"></script>
+		<script src="../appjs/LoadPointMap1.js"></script>
+		<script type="text/javascript">
+
+			Ext.Loader.setConfig({
+				enabled : true,
+				paths : {
+					'Ext.ux' : 'ux'
+				}
+			});
+
+            Ext.require(['Ext.ux.LeafletMapView']);
+            require.config({
+                paths:{
+                    echarts:'lib/echarts/echarts',
+                    'echarts/chart/bar':'lib/echarts/echarts',
+                    'echarts/chart/line':'lib/echarts/echarts'
+                }
+            });
+			Ext.onReady(function() {
+				Ext.QuickTips.init();
+
+				Ext.Ajax.disableCaching = false;
+
+				Ext.create('Ext.Viewport', {
+					layout : {
+						type : 'border',
+						padding : '0 5 5 5' // pad the layout from the window edges
+					},
+					items : [{
+						id : 'app-header',
+						xtype : 'box',
+						region : 'north',
+						height : 40,
+						html : 'GeoSNS Portal应用'
+					},{
+						id : 'app-boot',
+						xtype : 'box',
+						region : 'south',
+						height : 20,
+						html : '社会化网络计算研究小组 2013'
+					}, {
+						xtype : 'container',
+						region : 'center',
+						layout : 'border',
+						items : [{
+							xtype : 'container',
+							region : 'center',
+							//margins : '0 5 0 0',
+                            layout : 'border',
+							items : [{
+                                region : 'center',
+								xtype : 'leafletmapview',
+								title : 'SNS用户分布地图[数据]'
+							},{
+                                region : 'south',
+                                xtype : 'panel',
+                                title :'信息图表',
+                                collapsible : true,
+                                height :300,
+                                html:'<div id=  "chartArea"   style=  "height:300px;border:1px solid #ccc;padding:10px;"  ></div>'
+                            }]
+
+						}, {
+							region : 'west',
+							stateId : 'navigation-panel',
+							id : 'west-panel', // see Ext.getCmp() below
+							title : '信息检索',
+							split : true,
+							width : 250,
+							minWidth : 200,
+							maxWidth : 300,
+							collapsible : true,
+							animCollapse : true
+						}]
+					}]
+				});
+			});
+
+		</script>
+	</head>
+	<body>
+		<div id="west" class="x-hide-display">
+			<p>
+				将点评网的数据进行抓录，然后通过leaflet展示
+				<br>
+
+				<br>
+			</p>
+		</div>
+		<div id="center"></div>
+		<div id='swipe'>
+			<div id='handle'></div>
+		</div>
+	</body>
+</html>

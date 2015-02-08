@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Mapbox地图赏析</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <link rel="stylesheet" href="../lib/leaflet/leaflet.css"/>
+    <!--[if lte IE 8]>
+    <link rel="stylesheet" href="../lib/leaflet/leaflet.ie.css"/><![endif]-->
+    <script src="../lib/leaflet/leaflet-0.6.2.js"></script>
+</head>
+<body>
+<style>
+    body {
+        margin: 0;
+        padding: 0;
+    }
+
+    #map {
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        height: 100%;
+    }
+</style>
+<div id='map'></div>
+<script>
+
+
+    // Add a CloudMade tile layer with style #999
+    var baseLayer = L.tileLayer('http://{s}.tiles.mapbox.com/v3/openplans.map-g4j0dszr/{z}/{x}/{y}.png', {
+        attribution: 'Map &copy; Pacific Rim Coordination Center (PRCC).  Certain data &copy; <a href="http://openstreetmap.org">OpenStreetMap</a> contributors, <a href="http://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>',
+        key: 'BC9A493B41014CAABB98F0471D759707',
+        styleId: 22677
+    });
+    var mapboxLayer1 = L.tileLayer('https://a.tiles.mapbox.com/v3/examples.bc17bb2a/{z}/{x}/{y}.png', {
+        attribution: 'Map &copy; Pacific Rim Coordination Center (PRCC).  Certain data &copy; <a href="http://openstreetmap.org">OpenStreetMap</a> contributors, <a href="http://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>',
+        key: 'BC9A493B41014CAABB98F0471D759707',
+        styleId: 22677
+    });
+    var mapboxLayer2 = L.tileLayer('https://a.tiles.mapbox.com/v3/examples.c7d2024a/{z}/{x}/{y}.png', {
+        attribution: 'Map &copy; Pacific Rim Coordination Center (PRCC).  Certain data &copy; <a href="http://openstreetmap.org">OpenStreetMap</a> contributors, <a href="http://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>',
+        key: 'BC9A493B41014CAABB98F0471D759707',
+        styleId: 22677
+    });
+    var mapboxLayer3 = L.tileLayer('https://d.tiles.mapbox.com/v3/examples.a4c252ab/{z}/{x}/{y}.png', {
+        attribution: 'Map &copy; Pacific Rim Coordination Center (PRCC).  Certain data &copy; <a href="http://openstreetmap.org">OpenStreetMap</a> contributors, <a href="http://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>',
+        key: 'BC9A493B41014CAABB98F0471D759707',
+        styleId: 22677
+    });
+    var mapboxLayer4 = L.tileLayer('https://d.tiles.mapbox.com/v3/examples.a3cad6da/{z}/{x}/{y}.png', {
+        attribution: 'Map &copy; Pacific Rim Coordination Center (PRCC).  Certain data &copy; <a href="http://openstreetmap.org">OpenStreetMap</a> contributors, <a href="http://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>',
+        key: 'BC9A493B41014CAABB98F0471D759707',
+        styleId: 22677
+    });
+    var mapboxLayer5 = L.tileLayer('https://d.tiles.mapbox.com/v3/examples.fb8f9523/{z}/{x}/{y}.png', {
+        attribution: 'Map &copy; Pacific Rim Coordination Center (PRCC).  Certain data &copy; <a href="http://openstreetmap.org">OpenStreetMap</a> contributors, <a href="http://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>',
+        key: 'BC9A493B41014CAABB98F0471D759707',
+        styleId: 22677
+    });
+    var mapboxLayer6 = L.tileLayer('https://a.tiles.mapbox.com/v3/examples.map-qfyrx5r8/{z}/{x}/{y}.png', {
+        attribution: 'Map &copy; Pacific Rim Coordination Center (PRCC).  Certain data &copy; <a href="http://openstreetmap.org">OpenStreetMap</a> contributors, <a href="http://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>',
+        key: 'BC9A493B41014CAABB98F0471D759707',
+        styleId: 22677
+    });
+    var mapboxLayer7 = L.tileLayer('https://a.tiles.mapbox.com/v3/examples.map-9ijuk24y/{z}/{x}/{y}.png', {
+        attribution: 'Map &copy; Pacific Rim Coordination Center (PRCC).  Certain data &copy; <a href="http://openstreetmap.org">OpenStreetMap</a> contributors, <a href="http://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>',
+        key: 'BC9A493B41014CAABB98F0471D759707',
+        styleId: 22677
+    });
+    var mapboxLayer8 = L.tileLayer('https://b.tiles.mapbox.com/v3/examples.map-3gisupiu/{z}/{x}/{y}.png', {
+        attribution: 'Map &copy; Pacific Rim Coordination Center (PRCC).  Certain data &copy; <a href="http://openstreetmap.org">OpenStreetMap</a> contributors, <a href="http://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>',
+        key: 'BC9A493B41014CAABB98F0471D759707',
+        styleId: 22677
+    });
+    var mapboxLayer9 = L.tileLayer('https://d.tiles.mapbox.com/v3/financialtimes.map-w7l4lfi8/{z}/{x}/{y}.png', {
+        attribution: 'Map &copy; Pacific Rim Coordination Center (PRCC).  Certain data &copy; <a href="http://openstreetmap.org">OpenStreetMap</a> contributors, <a href="http://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>',
+        key: 'BC9A493B41014CAABB98F0471D759707',
+        styleId: 22677
+    });
+    var githubLayer = L.tileLayer('https://c.tiles.mapbox.com/v3/github.map-xgq2svrz/{z}/{x}/{y}.png', {
+        attribution: 'Map &copy; Pacific Rim Coordination Center (PRCC).  Certain data &copy; <a href="http://openstreetmap.org">OpenStreetMap</a> contributors, <a href="http://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>',
+        key: 'BC9A493B41014CAABB98F0471D759707',
+        styleId: 22677
+    });
+    var foursquareLayer = L.tileLayer('https://a.tiles.mapbox.com/v3/foursquare.map-0y1jh28j/{z}/{x}/{y}.png', {
+        attribution: 'Map &copy; Pacific Rim Coordination Center (PRCC).  Certain data &copy; <a href="http://openstreetmap.org">OpenStreetMap</a> contributors, <a href="http://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>',
+        key: 'BC9A493B41014CAABB98F0471D759707',
+        styleId: 22677
+    });
+    //    map.addLayer(baseLayer2);
+    var baseMaps = {
+        "灰度地图": baseLayer,
+        '游戏地图':mapboxLayer1,
+        '剪纸地图':mapboxLayer3,
+        '航海地图':mapboxLayer4,
+        '黑暗地图':mapboxLayer5,
+        '高清影像':mapboxLayer6,
+        '清爽地图':mapboxLayer7,
+        '绿色地图':mapboxLayer8,
+        '立体地图':mapboxLayer2,
+        '金融时报底图':mapboxLayer9,
+        'Github Map':githubLayer,
+        'Foursquare':foursquareLayer
+    };
+    layersControl = new L.Control.Layers(baseMaps);
+    var map = new L.Map('map', {center: [30.258 , 120.1556], zoom: 8, layers: [mapboxLayer1]});
+    map.addControl(layersControl);
+</script>
+</body>
+</html>

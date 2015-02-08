@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <link rel="shortcut icon" href="../../docs-assets/ico/favicon.png">
+
+    <title>Open Map</title>
+
+    <!-- Bootstrap core CSS -->
+    <link href="lib/dist/css/bootstrap.css" rel="stylesheet">
+
+    <!-- Custom styles for this template -->
+    <link href="lib/dist/css/justified-nav.css" rel="stylesheet">
+    <link href="lib/dist/css/bootstrap-responsive.css" rel="stylesheet">
+
+    <!-- Just for debugging purposes. Don't actually copy this line! -->
+    <!--[if lt IE 9]>
+    <script src="../../docs-assets/js/ie8-responsive-file-warning.js"></script><![endif]-->
+
+    <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!--[if lt IE 9]>
+    <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+    <script src="https://oss.maxcdn.com/libs/respond.js/1.3.0/respond.min.js"></script>
+    <![endif]-->
+    <script src="lib/dist/jquery.js"></script>
+    <script src="lib/dist/js/bootstrap.js"></script>
+
+    <link rel="stylesheet" href="lib/leaflet/leaflet.css"/>
+    <!--[if lte IE 8]>
+    <link rel="stylesheet" href="lib/leaflet/leaflet.ie.css"/><![endif]-->
+    <script src="lib/leaflet/leaflet-0.6.2.js"></script>
+    <link rel="stylesheet" href="lib/leaflet/plugin/locatecontrol/L.Control.Locate.css"/>
+    <script src="lib/leaflet/plugin/locatecontrol/L.Control.Locate.js"></script>
+    <style>
+        #map {
+            /*position: absolute;*/
+            /*top: 200px;*/
+            left: 0;
+            right: 0;
+            /*bottom: 0;*/
+            height: 200px;
+        }
+    </style>
+</head>
+
+<body>
+<div class="navbar navbar-fixed-top navbar-inverse" role="navigation">
+    <div class="container">
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="#">地理信息可视化</a>
+        </div>
+        <div class="collapse navbar-collapse">
+            <ul class="nav navbar-nav">
+                <li class="active"><a href="#">Home</a></li>
+                <li class="dropdown">
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown">项目 <b class="caret"></b></a>
+                    <ul class="dropdown-menu">
+                                               <li><a href="#">Something else here</a></li>
+                        <li class="divider"></li>
+                        <li><a href="#">Separated link</a></li>
+                        <li><a href="#">One more separated link</a></li>
+                    </ul>
+                </li>
+                <li class="dropdown">
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown">数据 <b class="caret"></b></a>
+                    <ul class="dropdown-menu">
+                        <li><a href="http://extract.bbbike.org">OSM数据抽取</a></li>
+                        <li class="divider"></li>
+                        <li><a href="#">Separated link</a></li>
+                    </ul>
+                </li>
+                <li><a href="webcontent/Mapboxmap.html">Mapbox底图欣赏</a></li>
+                <li><a href="webcontent/echarts.html">EChart例子</a></li>
+                <li><a href="#" data-toggle="modal" data-target="#myModal">联系作者</a></li>
+            </ul>
+        </div>
+        <!-- /.nav-collapse -->
+    </div>
+    <!-- /.container -->
+</div>
+<div class="page-header">
+
+</div>
+<!-- /.navbar -->
+<div class="container">
+    <div class="row row-offcanvas row-offcanvas-right">
+        <div class="panel panel-default">
+            <div class="panel-body">
+                <div id='map'></div>
+            </div>
+        </div>
+        <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
+             aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                        <h4 class="modal-title" id="myModalLabel">关于</h4>
+                    </div>
+                    <div class="modal-body">
+                        ludwigyuan@gmail.com<br>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                    </div>
+                </div>
+                <!-- /.modal-content -->
+            </div>
+            <!-- /.modal-dialog -->
+        </div>
+        <!-- Example row of columns -->
+        <div class="row">
+            <div class="col-lg-3">
+                <h2>Leaflet展示各类底图</h2>
+
+                <p>包含了地震图、OSM、高德地图、HERE地图、Google地图、Mapbox和Cloudmade地图</p>
+
+                <p><a href="webcontent/Landblock.html" class="btn btn-primary" href="#" role="button">View
+                    details &raquo;</a></p>
+            </div>
+            <div class="col-lg-3">
+                <h2>USGS地震信息可视化1</h2>
+
+                <p>展示USGS Earthquake RSS在1周内的地震数据.下面有两个例子，第一个使用本地文件；第二个直接访问USGS的数据，但github.io不允许跨域因此看不到效果</p>
+
+                <p><a href="webcontent/DynamicEarthquake_1.html" class="btn btn-primary" href="#"
+                      role="button">本地可见 &raquo;</a>&raquo;<a href="webcontent/DynamicEarthquake.html"
+                                                              class="btn btn-primary" href="#"
+                                                              role="button">跨域不可见 &raquo;</a></p>
+            </div>
+            <div class="col-lg-3">
+                <h2>USGS地震信息可视化2</h2>
+
+                <p>展示USGS Earthquake RSS在1周内的地震数据..下面有两个例子，第一个使用本地文件；第二个直接访问USGS的数据，但github.io不允许跨域因此看不到效果</p>
+
+                <p><a href="webcontent/DynamicEarthquake2_1.html" class="btn btn-primary" href="#"
+                      role="button">本地可见 &raquo;</a>&raquo;<a href="webcontent/DynamicEarthquake2.html"
+                                                              class="btn btn-primary" href="#"
+                                                              role="button">跨域不可见 &raquo;</a></p>
+            </div>
+            <div class="col-lg-3">
+                <h2>ESRI数据底图与Leaftlet</h2>
+
+                <p>展示了ESRI的街道、影像、灰度、拓扑、国家地理与海洋等六种底图数据，并展示了如何添加featureLayer的方法. </p>
+
+                <p><a class="btn btn-primary" href="webcontent/EsriDemo.html" role="button">View details &raquo;</a></p>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-lg-3">
+                <h2>Leaflet展示天地图</h2>
+
+                <p>展示天地图的地图、影像和地形数据，还包括注记. </p>
+
+                <p><a class="btn btn-primary" href="webcontent/Tianditu.html" role="button">View details &raquo;</a></p>
+            </div>
+            <div class="col-lg-3">
+                <h2>天地图卷帘效果</h2>
+
+                <p>天地图卷帘. </p>
+
+                <p><a class="btn btn-primary" href="webcontent/Tianditu2.html" role="button">View details &raquo;</a>
+                </p>
+            </div>
+            <div class="col-lg-3">
+                <h2>基于D3的时序变化</h2>
+
+                <p>这是在web上找到的一个使用D3.js来开发的动态时序可视化例子，看完后，对于一般点要素的动态可视化有思路了.</p>
+
+                <p><a class="btn btn-primary" href="webcontent/phillyBikeThefts/index.html" role="button">View
+                    details &raquo;</a></p>
+            </div>
+            <div class="col-lg-3">
+                <h2>全国资源城市分类</h2>
+
+                <p>全国资源城市分类地图. </p>
+
+                <p><a class="btn btn-primary" href="webcontent/CityResource.html" role="button">View details &raquo;</a>
+                </p>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-lg-3">
+                <h2>全国主要城市空气质量地图</h2>
+
+                <p>2013年12月4-6日，华东地区空气质量爆棚，特制作此全国主要城市AQI空气质量地图.该地图数据选自PM25.in。由于没有申请其API，因此数据是从
+                页面上抓取并使用Baidu Map API进行地理编码处理.
+                </p>
+
+                <p><a class="btn btn-primary" href="webcontent/ChinaPM25.html" role="button">View details &raquo;</a></p>
+            </div>
+                  </div>
+        <!-- /.modal -->
+        <!-- Site footer -->
+        <div class="footer">
+            <p>&copy; Company 2013</p>
+        </div>
+
+    </div>
+</div>
+<script>
+    var map = new L.Map('map', {center: [29.888 , 121.5666], zoom: 10});
+    var mapboxLayer4 = L.tileLayer('http://1.maps.nlp.nokia.com.cn/maptile/2.1/maptile/933ee1206a/normal.day/{z}/{x}/{y}/256/png8?lg=CHI&app_id=90oGXsXHT8IRMSt5D79X&token=JY0BReev8ax1gIrHZZoqIg&xnlp=CL_JSMv2.5.3.2', {
+        key: 'BC9A493B41014CAABB98F0471D759707',
+        styleId: 22677
+    });
+    lc = L.control.locate({
+        follow: true,
+        stopFollowingOnDrag: true
+    }).addTo(map);
+    map.addLayer(mapboxLayer4);
+</script>
+</body>
+</html>

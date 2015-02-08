@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <title>动态地震数据可视化[展示复杂图形效果]</title>
+    <link rel="stylesheet" href="../lib/leaflet/leaflet.css"/>
+    <!--[if lte IE 8]>
+    <link rel="stylesheet" href="../lib/leaflet/leaflet.ie.css"/>
+    <![endif]-->
+    <link rel="stylesheet" href="../lib/leaflet-dvf/dist/css/dvf.css"/>
+    <script type="text/javascript" src="../lib/ext/ext-all.js"></script>
+    <script type="text/javascript" src="../lib/jquery/jquery-1.9.1.min.js"></script>
+    <script src="../lib/leaflet/leaflet-0.6.2.js"></script>
+    <script src="../lib/leaflet-dvf/dist/leaflet-dvf.js"></script>
+    <script src="../lib/leaflet-dvf/leaflet.dvf.utils.js"></script>
+    <script src="../lib/leaflet-dvf/leaflet.dvf.markers.js"></script>
+    <script src="../lib/leaflet-dvf/date.format.js"></script>
+    <script src="../data/earthquake.js"></script>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+        }
+
+        #map {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            height: 100%;
+        }
+    </style>
+</head>
+<body>
+
+<div id='map'></div>
+<script>
+    Ext.Ajax.disableCaching = false;
+    map = L.map('map').setView([0.0, 0.0], 2);
+    var baseLayer = L.tileLayer('http://{s}.tiles.mapbox.com/v3/bclc-apec.map-rslgvy56/{z}/{x}/{y}.png', {
+        attribution: 'Map &copy; Certain data &copy; <a href="http://openstreetmap.org">HERE</a> contributors, 高德</a>'
+    });
+    map.addLayer(baseLayer)
+    var data = earthquake;
+
+    var magnitudeColorFunction = new L.HSLHueFunction(new L.Point(0, 90), new L.Point(10, 0), {
+        outputSaturation: '100%',
+        outputLuminosity: '25%'
+    });
+    var magnitudeFillColorFunction = new L.HSLHueFunction(new L.Point(0, 90), new L.Point(10, 0), {
+        outputSaturation: '100%',
+        outputLuminosity: '50%'
+    });
+    var magnitudeRadiusFunction = new L.LinearFunction(new L.Point(0, 5), new L.Point(10, 25));
+
+
+    var now = Math.round((new Date()).getTime());
+    var start = now - 86400000;
+
+    // Initialize a linear function to map earthquake time to opacity
+    var timeOpacityFunction = new L.LinearFunction(new L.Point(start, 0.3), new L.Point(now, 1));
+
+    // Setup a new data layer
+    var dataLayer = new L.DataLayer(data, {
+        recordsField: 'features',
+        latitudeField: 'geometry.coordinates.1',
+        longitudeField: 'geometry.coordinates.0',
+        locationMode: L.LocationModes.LATLNG,
+        displayOptions: {
+            'properties.mag': {
+                displayName: '震级',
+                color: magnitudeColorFunction,
+                fillColor: magnitudeFillColorFunction,
+                radius: magnitudeRadiusFunction
+            },
+            'properties.time': {
+                displayName: '时间',
+                opacity: timeOpacityFunction,
+                fillOpacity: timeOpacityFunction,
+                displayText: function (value) {
+                    return dateFormat(new Date(Number(value)), 'mm/dd/yy HH:MM');
+                }
+            }
+        },
+        layerOptions: {
+            numberOfSides: 4,
+            radius: 10,
+            weight: 1,
+            color: '#000',
+            opacity: 0.2,
+            fillOpacity: 0.7,
+            dropShadow: true
+        },
+        tooltipOptions: {
+            iconSize: new L.Point(90, 76),
+            iconAnchor: new L.Point(-4, 76)
+        },
+        onEachRecord: function (layer, record) {
+            var $html = L.HTMLUtils.buildTable(record);
+            layer.bindPopup($html.wrap('<div/>').parent().html(), {
+                minWidth: 400,
+                maxWidth: 400
+            });
+        }
+    });
+//    Add the data layer to the map
+    map.addLayer(dataLayer);
+    lastLayer = dataLayer;
+
+    var legendControl = new L.Control.Legend();
+    legendControl.addTo(map);
+</script>
+
+</body>
+</html>

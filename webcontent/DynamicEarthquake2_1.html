@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <title>动态地震数据可视化[展示复杂图形效果]</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <link rel="favicon.ico" href="favicon.ico" type="image/x-icon">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!--引入EXT API和关键CSS，其中custom.css是自定义CSS----->
+    <script type="text/javascript" src="../lib/ext/ext-all.js"></script>
+    <link rel="stylesheet" href="../lib/ext/resources/css/custom.css"/>
+    <link rel="stylesheet" href="../lib/leaflet/leaflet.css"/>
+    <!--[if lte IE 8]>
+    <link rel="stylesheet" href="../lib/leaflet/leaflet.ie.css"/><![endif]-->
+    <link rel="stylesheet" href="../lib/leaflet/plugin/MarkerCluster/MarkerCluster.css"/>
+    <link rel="stylesheet" href="../lib/leaflet/plugin/MarkerCluster/MarkerCluster.Default.css"/>
+    <!--[if lte IE 8]>
+    <link rel="stylesheet" href="../dist/MarkerCluster.Default.ie.css"/><![endif]-->
+    <link rel="stylesheet" href="../lib/leaflet/plugin/esri/demo.css"/>
+    <!--引入leaflet的API----->
+    <script src="../lib/leaflet/leaflet-0.6.2-src.js"></script>
+    <script src="../lib/leaflet/plugin/MarkerCluster/leaflet.markercluster-src.js"></script>
+    <script src="../data/earthquake.js"></script>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+        }
+
+        #map {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            height: 100%;
+        }
+    </style>
+</head>
+<body>
+
+<div id='map'></div>
+<script>
+    Ext.Ajax.disableCaching = false;
+    map = L.map('map').setView([0.0, 0.0], 2);
+    var markers = L.markerClusterGroup({
+        spiderfyOnMaxZoom: false,
+        disableClusteringAtZoom: 12,
+        polygonOptions: {
+            color: "#2d84c8",
+            weight: 4,
+            opacity: 1,
+            fillOpacity: 0.5
+        },
+        //设置不同层级圆环的样式，它是根据数字位数来确定css的
+        iconCreateFunction: function (cluster) {
+            // get the number of items in the cluster
+            var count = cluster.getChildCount();
+            var digits = (count + "").length;
+            return new L.DivIcon({
+                html: count,
+                className: "cluster digits-" + digits,
+                iconSize: null
+            });
+        }
+    });
+    // Add a CloudMade tile layer with style #999
+    var baseLayer = L.tileLayer('http://3.maptile.lbs.ovi.com/maptiler/v2/maptile/newest/normal.day/{z}/{x}/{y}/256/png8?app_id=BC9A493B41014CAABB98F0471D759707&token=AJKnXv84fjrb0KIHawS0Tg', {
+        attribution: 'Map &copy; Certain data &copy; <a href="http://openstreetmap.org">HERE</a> contributors, <a href="http://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>'
+    });
+
+    baseLayer.addTo(map);
+
+    var respText = earthquake;
+
+    // 点聚类
+    var ms = [];
+    for (var i = 0; i < respText.features.length; i++) {
+        var a = respText.features[i];
+        var m = new L.Marker(new L.LatLng(a['geometry']['coordinates'][1], a['geometry']['coordinates'][0]), {
+            value: 1,
+            title: 'ss'
+        });
+        var popupText = "<div>地点:" + a['properties']['place'] + "<br>震级:" + a['properties']['mag'] + "</div>";
+        m.bindPopup(popupText);
+        ms.push(m);
+        //markers.addLayer(m);
+    }
+    markers.addLayers(ms);
+
+    map.addLayer(markers);
+
+</script>
+
+</body>
+</html>
